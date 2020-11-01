@@ -1,0 +1,42 @@
+function bunnyKill(input) {
+    let coordinates = input.pop().split(' ').map(str => str.split(',').map(x => Number(x)));
+    let matrixHangar = input.map(row => row.split(' ').map(x => Number(x)));
+
+    let result = 0;
+    let kills = 0;
+    let bomb = 0;
+
+    for (let b = 0; b < coordinates.length; b++) {
+        let bombRaw = coordinates[b][0];
+        let bombCol = coordinates[b][1];
+        bomb = matrixHangar[bombRaw][bombCol];
+        if (bomb <= 0) {
+            continue;
+        }
+
+        let startRaw = Math.max(0, bombRaw - 1);
+        let endRaw = Math.min(bombRaw + 1, input.length - 1);
+
+        for (let row = startRaw; row <= endRaw; row++) {
+            let starCol = Math.max(0, bombCol - 1);
+            let endCol = Math.min(bombCol + 1, input[row].length - 1);
+
+            for (let col = starCol; col <= endCol; col++) {
+                matrixHangar[row][col] -= bomb;
+            }
+        }
+        result += bomb;
+        kills++;
+    }
+    for (let i = 0; i < matrixHangar.length; i++) {
+        for (let p = 0; p < matrixHangar[i].length; p++) {
+            if (matrixHangar[i][p] > 0) {
+                result += matrixHangar[i][p];
+                kills++;
+            }
+        }
+    }
+
+    console.log(result);
+    console.log(kills);
+}
